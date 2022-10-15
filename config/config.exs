@@ -7,12 +7,28 @@
 # General application configuration
 import Config
 
+config :tailwind,
+  version: "3.1.8",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
+config :surface, :components, [
+  {Surface.Components.Form.ErrorTag,
+   default_translator: {FirstWeb.ErrorHelpers, :translate_error}}
+]
+
 config :first,
   ecto_repos: [First.Repo]
 
 # Configures the endpoint
 config :first, FirstWeb.Endpoint,
-  url: [host: "localhost"],
+  url: [host: "0.0.0.0"],
   render_errors: [view: FirstWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: First.PubSub,
   live_view: [signing_salt: "lB1kMiJG"]
@@ -35,6 +51,12 @@ config :esbuild,
   default: [
     args:
       ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ],
+  catalogue: [
+    args:
+      ~w(../deps/surface_catalogue/assets/js/app.js --bundle --target=es2016 --minify --outdir=../priv/static/assets/catalogue),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]

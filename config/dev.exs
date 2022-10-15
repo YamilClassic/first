@@ -19,14 +19,16 @@ config :first, First.Repo,
 config :first, FirstWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: 4000],
+  http: [ip: {0, 0, 0, 0}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "z796lLxCS0Tf6WY+5ZIYmoetNVR0nxxiAqZ/hP9izmaYWC1Pp6Ll3cWFxR//CBfG",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]}
+    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    esbuild: {Esbuild, :install_and_run, [:catalogue, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
 # ## SSL Support
@@ -55,12 +57,14 @@ config :first, FirstWeb.Endpoint,
 
 # Watch static and templates for browser reloading.
 config :first, FirstWeb.Endpoint,
+  reloadable_compilers: [:gettext, :elixir, :surface],
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/first_web/(live|views)/.*(ex)$",
-      ~r"lib/first_web/templates/.*(eex)$"
+      ~r"lib/first_web/(live|views|components)/.*(ex|sface|js)$",
+      ~r"lib/first_web/templates/.*(eex|sface)$",
+      ~r"priv/catalogue/.*(ex)$"
     ]
   ]
 

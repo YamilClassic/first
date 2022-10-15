@@ -39,6 +39,8 @@ defmodule FirstWeb do
 
       # Include shared imports and aliases for views
       unquote(view_helpers())
+      import Surface
+      use Surface.View, root: "lib/first_web/templates"
     end
   end
 

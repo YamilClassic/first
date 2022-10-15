@@ -7,7 +7,7 @@ defmodule First.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:gettext] ++ Mix.compilers(),
+      compilers: Mix.compilers() ++ [:surface],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -25,7 +25,8 @@ defmodule First.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support"] ++ catalogues()
+  defp elixirc_paths(:dev), do: ["lib"] ++ catalogues()
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -39,7 +40,7 @@ defmodule First.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.18.0"},
+      {:phoenix_live_view, "~> 0.18.2"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.7.1"},
       {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
@@ -49,7 +50,9 @@ defmodule First.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:surface, "~> 0.9.0"}
+      {:surface, "~> 0.9.0"},
+      {:surface_catalogue, "~> 0.5.2"},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -66,6 +69,12 @@ defmodule First.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.deploy": ["esbuild default --minify", "phx.digest"]
+    ]
+  end
+
+  def catalogues do
+    [
+      "priv/catalogue"
     ]
   end
 end
