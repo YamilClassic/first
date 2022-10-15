@@ -1,4 +1,4 @@
-# First
+# First Project for practice with Phoenix Surface and TailwindCSS
 
 To start your Phoenix server:
 
